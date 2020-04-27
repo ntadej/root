@@ -1050,6 +1050,9 @@ RooAbsReal* RooAbsPdf::createNLL(RooAbsData& data, const RooLinkedList& cmdList)
     }
   }
 
+  // Clear possible range attributes from previous fits.
+  setStringAttribute("fitrange", nullptr);
+
   if (pc.hasProcessed("Range")) {
     Double_t rangeLo = pc.getDouble("rangeLo") ;
     Double_t rangeHi = pc.getDouble("rangeHi") ;
@@ -1060,6 +1063,7 @@ RooAbsReal* RooAbsPdf::createNLL(RooAbsData& data, const RooLinkedList& cmdList)
       RooRealVar* rrv =  dynamic_cast<RooRealVar*>(arg) ;
       if (rrv) rrv->setRange("fit",rangeLo,rangeHi) ;
     }
+
     // Set range name to be fitted to "fit"
     rangeName = "fit" ;
   }
@@ -1903,6 +1907,9 @@ RooAbsReal* RooAbsPdf::createChi2(RooDataHist& data, const RooCmdArg& arg1,  con
   RooAbsReal* chi2 ;
   string baseName = Form("chi2_%s_%s",GetName(),data.GetName()) ;
   
+  // Clear possible range attributes from previous fits.
+  setStringAttribute("fitrange", nullptr);
+
   if (!rangeName || strchr(rangeName,',')==0) {
     // Simple case: default range, or single restricted range
 
